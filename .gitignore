@@ -1,0 +1,5 @@
+wrk.log
+wrk-done.log
+wrk-headers.log
+config.env
+servers.txt
