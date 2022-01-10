@@ -201,7 +201,7 @@ live-stats () {
 
     if [ $WRK_LIVESTATS = 'true' ]; then
         read-from-stdin
-        STATUS=$status
+        STATUS=$?
         cat $SERVERS_FILE | ssh-all "ls $WRK_PATH | tail -n1 | xargs -ILOGFN tail -f $WRK_PATH/LOGFN"
         if [ ! $STATUS -eq 255 ]; then
             clean-stdin-temp
