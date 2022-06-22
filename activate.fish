@@ -6,6 +6,13 @@ echo
 echo "Set of commands & lua scripts to run wrk in clusters and collect stats"
 echo
 
+set -e WRK_PATH
+set -e SSH_PORT
+set -e SSH_OPTS
+set -e SCP_OPTS
+set -e SSH_CMD
+set -e SCP_CMD
+
 set -q CONFIG_FILE || set CONFIG_FILE config.env
 cat $CONFIG_FILE | sed -e 's/\([A-Z_]\+\)=\(.*\)/set \1 "\2"/' | grep -v '^#' | source
 
@@ -44,8 +51,8 @@ set -q SCP_CMD || set SCP_CMD scp
 set STDIN_TMP_FILE ''
 
 if not test "$SSH_KEY" = "true"
-    set SSH_CMD sshpass -p "\"$SSH_PWD[1..-1]\"" $SSH_CMD
-    set SCP_CMD sshpass -p \"$SSH_PWD\" $CSP_CMD
+    set SSH_CMD sshpass -p "$SSH_PWD[1..-1]" $SSH_CMD
+    set SCP_CMD sshpass -p "$SSH_PWD" $CSP_CMD
 end
 
 

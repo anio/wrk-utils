@@ -6,6 +6,12 @@ echo
 echo "Set of commands & lua scripts to run wrk in clusters and collect stats"
 echo
 
+WRK_PATH=""
+SSH_PORT=""
+SSH_OPTS=""
+SCP_OPTS=""
+SSH_CMD=""
+SCP_CMD=""
 
 CONFIG_FILE=${CONFIG_FILE:-config.env}
 source $CONFIG_FILE
@@ -46,8 +52,8 @@ SCP_CMD=${SCP_CMD:-scp}
 STDIN_TMP_FILE=''
 
 if [ "$SSH_KEY" != "true" ]; then
-    SSH_CMD="sshpass -p \"$SSH_PWD\" $SSH_CMD"
-    SCP_CMD="sshpass -p \"$SSH_PWD\" $CSP_CMD"
+    SSH_CMD="sshpass -p $SSH_PWD $SSH_CMD"
+    SCP_CMD="sshpass -p $SSH_PWD $CSP_CMD"
 fi
 
 
@@ -83,6 +89,7 @@ echo -e "\t-> ssh-all 'ps aux | grep something'"
 ssh-all () {
     read-from-stdin
     STATUS=$?
+    cat $SERVERS_FILE | xargs -P100 -I{} echo $SSH_CMD $SSH_OPTS $SSH_USR@{} $@
     cat $SERVERS_FILE | xargs -P100 -I{} $SSH_CMD $SSH_OPTS $SSH_USR@{} $@
 
     if [ ! $STATUS -eq 255 ]; then
